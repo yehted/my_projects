@@ -1,39 +1,41 @@
 import sys
 
-def make_change(amount, coin_list):
-    sorted_coins = sorted(coin_list, reverse=True)
-    int_sorted_coins = [int(i*100) for i in sorted_coins]
-    int_amount = int(amount*100)
-    coin_dict = {coin: 0 for coin in int_sorted_coins}
+def _make_matrix(coins, W):
+    m = [[0 for _ in xrange(W + 1)] for _ in xrange(len(coins) + 1)]
+    for i in xrange(W + 1):
+        m[0][i] = i
+    return m
 
-    print int_amount
-    print int_sorted_coins
+def full_m(coins, W):
+    min_coins = _make_matrix(coins, W)
+    for c in xrange(1, len(coins) + 1):
+        for value in xrange(1, W + 1):
+            if coins[c - 1] == value:
+                min_coins[c][value] = 1
 
-    # Incrementally decrease until you can divide by coins that you have
-    while int_amount > 0:
-        for coin in int_sorted_coins:
-            while int_amount % coin == 0:
-                int_amount -= coin
-                coin_dict[coin] += 1
+            elif coins[c - 1] > value:
+                min_coins[c][value] = min_coins[c - 1][value]
 
-    # Minimize the number of pennies?
+            else:
+                min_coins[c][value] = min(
+                    min_coins[c - 1][value], 1 + min_coins[c][value - coins[c - 1]])
+    return min_coins
 
+def short_m(coins, W):
+    min_coins = [i for i in xrange(W + 1)]
+    for value in xrange(W + 1):
+        min_count = value
+        for coin in [c for c in coins if c <= value]:
+            if min_coins[value - coin] + 1 < min_count:
+                min_count = min_coins[value - coin] + 1
+        min_coins[value] = min_count
 
-
-
-
-def find_factors(target):
-    factor_set = set()
-    num = 2
-    while target > (num * 2):
-        if target % num == 0:
-            factor_set.add(num)
-            factor_set.add(target / num)
-        num += 1
-
-    return factor_set
+    return min_coins
 
 if __name__ == '__main__':
+    # coins = [1, 5, 10, 23, 25]
+    coins = [1, 20, 30, 51]
     num = int(sys.argv[1])
-    print(find_factors(num))
-
+    # full_ans = full_m(coins, num)
+    short_ans = short_m(coins, num)
+    print short_ans
