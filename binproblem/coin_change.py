@@ -22,7 +22,7 @@ def full_m(coins, W):
     return min_coins
 
 def short_m(coins, W):
-    min_coins = [i for i in xrange(W + 1)]
+    min_coins = [0 for _ in xrange(W + 1)]
     for value in xrange(W + 1):
         min_count = value
         for coin in [c for c in coins if c <= value]:
@@ -33,8 +33,8 @@ def short_m(coins, W):
     return min_coins
 
 if __name__ == '__main__':
-    # coins = [1, 5, 10, 23, 25]
-    coins = [1, 20, 30, 51]
+    coins = [1, 5, 10, 23]
+    # coins = [1, 20, 30, 51]
     num = int(sys.argv[1])
     # full_ans = full_m(coins, num)
     short_ans = short_m(coins, num)
