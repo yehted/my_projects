@@ -4,19 +4,29 @@ def solution(A):
     sea = 0
     mountains = 0
     result = 0
+
+    start = 0
+    end = len(A) - 1
+
     total_mountains = sum(A)
 
-    import ipdb; ipdb.set_trace()
-    for i, day in enumerate(A):
-        if day == 0:
-            sea += 1
-        else:
-            mountains += 1
+    while start != end:
+        temp_sum = sum(A[start:end + 1])
+        temp_len = end - start + 1.0
 
-        if sea / (i + 1.0) > 0.5 and mountains / (i + 1.0) > 0.5:
-            result += i
+        mountains = temp_sum / temp_len
+        sea = 1.0 - mountains
+        print mountains, sea
 
-    return result
+        if mountains > 0.5 and sea > 0.5:
+            return temp_len
+        if sea <= 0.5:
+            start += 1
+        if mountains <= 0.5:
+            end -= 1
+
+
+    return 0
 
 if __name__ == '__main__':
     print "---------------"
