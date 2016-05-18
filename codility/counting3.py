@@ -1,3 +1,5 @@
+"""Find the smallest positive integer that is not in A"""
+
 def solution(A):
     # write your code in Python 2.7
     N = len(A)
