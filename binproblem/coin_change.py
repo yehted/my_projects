@@ -22,20 +22,31 @@ def full_m(coins, W):
     return min_coins
 
 def short_m(coins, W):
-    min_coins = [0 for _ in xrange(W + 1)]
+    min_coins = [0] * (W + 1) # initialize the vector with zeros
+
+    # Start building the values in the vector starting from 0
     for value in xrange(W + 1):
         min_count = value
-        for coin in [c for c in coins if c <= value]:
+
+        # Iterate through coins to see if the value can be made by an
+        # additional coin
+        for coin in coins:
+            if coin > value: # Only check for coins that are less than value
+                continue
+
             if min_coins[value - coin] + 1 < min_count:
+                # Increment the number of coins needed to make change by 1
                 min_count = min_coins[value - coin] + 1
-        min_coins[value] = min_count
+        min_coins[value] = min_count # Set the number of coins neede for 'value'
 
     return min_coins
 
 if __name__ == '__main__':
-    coins = [1, 5, 10, 23]
+    # coins = [1, 5, 10, 23]
+    coins = [1, 3, 4]
     # coins = [1, 20, 30, 51]
     num = int(sys.argv[1])
-    # full_ans = full_m(coins, num)
+    full_ans = full_m(coins, num)
     short_ans = short_m(coins, num)
+    print full_ans
     print short_ans
